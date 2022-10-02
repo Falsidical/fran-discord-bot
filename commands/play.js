@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const {
   createAudioPlayer,
   createAudioResource,
@@ -32,10 +32,17 @@ module.exports = {
     });
 
     const song = interaction.options.getString('song');
+    await interaction.reply(`Buscando ${song}`);
 
     let yt_info = await play.search(song, {
       limit: 1,
     });
+
+    const embed = new EmbedBuilder()
+      .setTitle('Reproduciendo')
+      .setDescription(`**[${yt_info[0].title}](${yt_info[0].url})**`)
+      .setThumbnail(yt_info[0].thumbnails[0].url)
+      .setFooter({ text: `Duracion: ${yt_info[0].durationRaw}` });
 
     let stream = await play.stream(yt_info[0].url, {});
 
@@ -52,7 +59,6 @@ module.exports = {
     player.play(resource);
 
     connection.subscribe(player);
-
-    await interaction.reply(`Reproduciendo ${song}`);
+    await interaction.editReply({ embeds: [embed] });
   },
 };
