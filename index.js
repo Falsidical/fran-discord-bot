@@ -3,8 +3,10 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 
+const respuestas = ['No', 'No puedo', 'Estoy con mi polola', 'Estoy en valorant', 'Hoy no puedo', 'otro dia', 'uwu'];
+
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.DirectMessages],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent],
   partials: ['CHANNEL', 'MESSAGE'],
 });
 
@@ -20,6 +22,7 @@ for (const file of commandFiles) {
 
 client.once('ready', (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
+  c.user.setActivity('VALORANT');
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -36,5 +39,12 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
-// Login to Discord with your client's token
+client.on('messageCreate', (message) => {
+  if (message.author.bot) return;
+  if (message.content === 'virus juegas' || message.content === 'nico juegas') {
+    const random = Math.floor(Math.random() * respuestas.length);
+    message.reply(respuestas[random]);
+  }
+});
+
 client.login(token);

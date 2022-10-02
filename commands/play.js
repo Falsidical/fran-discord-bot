@@ -23,7 +23,7 @@ module.exports = {
         .addStringOption((option) => option.setName('song').setDescription('Nombre de la cancion').setRequired(true))
     ),
   async execute(interaction) {
-    if (!interaction.member.voice.channel) return await interaction.reply('no estas en un canal');
+    if (!interaction.member.voice.channel) return await interaction.reply('No estas en un canal!');
 
     const connection = joinVoiceChannel({
       channelId: interaction.member.voice.channel.id,
