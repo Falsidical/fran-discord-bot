@@ -1,15 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const {
-  createAudioPlayer,
-  createAudioResource,
-  StreamType,
-  demuxProbe,
-  joinVoiceChannel,
-  NoSubscriberBehavior,
-  AudioPlayerStatus,
-  VoiceConnectionStatus,
-  getVoiceConnection,
-} = require('@discordjs/voice');
+const { getVoiceConnection, VoiceConnectionStatus } = require('@discordjs/voice');
 const play = require('play-dl');
 
 module.exports = {
@@ -17,9 +7,10 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.member.voice.channel) return await interaction.reply('No estas en un canal!');
 
-    const connection = getVoiceConnection(myVoiceChannel.guild.id);
-    connection.destroy();
+    const connection = await getVoiceConnection(interaction.guild.id);
+    await connection.disconnect();
+    //await connection.destroy();
 
-    await interaction.reply('Se detuvo la reproducion');
+    await interaction.reply(`Reproduccion detenida`);
   },
 };
